@@ -10,73 +10,46 @@ ApplicationWindow {
     height: 480
     visible: true
 
-    footer: TabBar {
-        id: bar
-        width: parent.width
-        TabButton {
-            text: qsTr("Home")
+    ColumnLayout {
+        anchors.fill: parent
+
+        TextField {
+            Layout.fillWidth: true
+            id: tx1
+            placeholderText: qsTr("Введите формулу")
         }
-        TabButton {
-            text: qsTr("Discover")
-        }
-        TabButton {
-            text: qsTr("Activity")
-        }
-    }
 
-    StackLayout {
-        currentIndex: bar.currentIndex
-        Item {
-            id: homeTab
-            ColumnLayout {
-                anchors.fill: parent
-
-                ChartView {
-                    anchors.fill: parent
-                      id: view
-                      theme: ChartView.ChartThemeBrownSand
-                      antialiasing: true
-
-                      PieSeries {
-                          id: pieSeries
-                          PieSlice { label: "eaten"; value: 94.9 }
-                          PieSlice { label: "not yet eaten"; value: 5.1 }
-                      }
-                  }
-
-                TextField {
-                    id: tx1
-                    placeholderText: qsTr("Введите формулу")
-                }
-
-                Button {
-                    text: "Рассчитать"
-                    onClicked: {
-                        backend.input = tx1.text
-                        dataSource.update(view.series(0));
-                    }
-                }
-
-                Text {
-                    text: backend.output
-                }
-
+        Button {
+            Layout.fillWidth: true
+            text: "Рассчитать"
+            onClicked: {
+                backend.input = tx1.text
+                dataSource.update(view.series(0));
             }
         }
-        Item {
-            id: discoverTab
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "Discover"
+
+        Text {
+            Layout.alignment: Qt.AlignCenter
+            text: backend.output
+            font.pointSize: 24
+        }
+
+        ChartView {
+            Layout.alignment: Qt.AlignCenter
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            id: view
+            theme: ChartView.ChartThemeBrownSand
+            antialiasing: true
+
+            PieSeries {
+                id: pieSeries
+                PieSlice { label: "eaten"; value: 94.9 }
+                PieSlice { label: "not yet eaten"; value: 5.1 }
             }
         }
-        Item {
-            id: activityTab
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "Activity"
-            }
-        }
+
     }
 
 }
